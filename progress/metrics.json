@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-echo '{
-=======
 {
->>>>>>> Stashed changes
   "weekly_metrics": {
     "2024-W01": {
       "total_study_time": 300,
@@ -14,8 +10,4 @@ echo '{
     }
   },
   "daily_practice": []
-<<<<<<< Updated upstream
-}' > progress/metrics.json
-=======
 }
->>>>>>> Stashed changes
