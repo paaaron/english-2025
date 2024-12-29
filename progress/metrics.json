@@ -1,8 +1,13 @@
-{
-  "daily_practice": [],
-  "weekly_metrics": {},
-  "vocabulary_progress": {
-    "known_words": 2000,
-    "recent_additions": []
-  }
-}
+echo '{
+  "weekly_metrics": {
+    "2024-W01": {
+      "total_study_time": 300,
+      "new_words_learned": 25
+    },
+    "2024-W02": {
+      "total_study_time": 320,
+      "new_words_learned": 30
+    }
+  },
+  "daily_practice": []
+}' > progress/metrics.json
