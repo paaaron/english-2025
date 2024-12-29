@@ -23,11 +23,26 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Generate Charts
+      run: python scripts/generate_charts.py
+    
     - name: Create Weekly Report
       run: |
         echo "# Weekly English Progress Report" > progress/weekly-report.md
         echo "Generated on: $(date)" >> progress/weekly-report.md
+        echo "## Progress Charts" >> progress/weekly-report.md
+        echo "![Study Time](progress/charts/study_time.png)" >> progress/weekly-report.md
+        echo "![Vocabulary Progress](progress/charts/vocabulary_progress.png)" >> progress/weekly-report.md
+        echo "![Activity Distribution](progress/charts/activity_distribution.png)" >> progress/weekly-report.md
         python scripts/track-progress.py >> progress/weekly-report.md
+    
+    - name: Commit and push charts
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add progress/charts/*
+        git commit -m "Update progress charts" || echo "No changes to commit"
+        git push
     
     - name: Create Issue
       uses: actions/github-script@v6
