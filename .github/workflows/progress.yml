@@ -2,8 +2,8 @@ name: Weekly English Progress Analysis
 
 on:
   schedule:
-    - cron: '0 9 * * 1'  # Se ejecuta cada lunes a las 9:00 AM
-  workflow_dispatch:      # Permite ejecución manual
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
 
 jobs:
   analyze:
@@ -23,38 +23,63 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Debug Directory Structure
+      run: |
+        echo "Current directory contents:"
+        ls -la
+        echo "\nProgress directory contents:"
+        ls -la progress/
+        echo "\nScripts directory contents:"
+        ls -la scripts/
+    
     - name: Generate Charts
-      run: python scripts/generate_charts.py
+      run: |
+        python scripts/generate_charts.py
+        echo "Charts generated, contents of charts directory:"
+        ls -la progress/charts/
     
     - name: Create Weekly Report
       run: |
+        echo "Creating report..."
         echo "# Weekly English Progress Report" > progress/weekly-report.md
         echo "Generated on: $(date)" >> progress/weekly-report.md
         echo "## Progress Charts" >> progress/weekly-report.md
-        echo "![Study Time](progress/charts/study_time.png)" >> progress/weekly-report.md
-        echo "![Vocabulary Progress](progress/charts/vocabulary_progress.png)" >> progress/weekly-report.md
-        echo "![Activity Distribution](progress/charts/activity_distribution.png)" >> progress/weekly-report.md
-        python scripts/track-progress.py >> progress/weekly-report.md
+        
+        if [ -f "progress/charts/study_time.png" ]; then
+          echo "![Study Time](progress/charts/study_time.png)" >> progress/weekly-report.md
+        else
+          echo "Study time chart not found" >> progress/weekly-report.md
+        fi
+        
+        if [ -f "progress/charts/vocabulary_progress.png" ]; then
+          echo "![Vocabulary Progress](progress/charts/vocabulary_progress.png)" >> progress/weekly-report.md
+        else
+          echo "Vocabulary progress chart not found" >> progress/weekly-report.md
+        fi
+        
+        python scripts/track-progress.py || echo "Error running track-progress.py"
+        
+        echo "Report contents:"
+        cat progress/weekly-report.md
     
-    - name: Commit and push charts
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add progress/charts/*
-        git commit -m "Update progress charts" || echo "No changes to commit"
-        git push
-    
-    - name: Create Issue
+    - name: Create Issue with Error Handling
       uses: actions/github-script@v6
       with:
         script: |
-          const fs = require('fs');
-          const report = fs.readFileSync('./progress/weekly-report.md', 'utf8');
-          
-          await github.rest.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `Weekly English Progress Report ${new Date().toISOString().split('T')[0]}`,
-            body: report,
-            labels: ['weekly-report']
-          });
+          try {
+            const fs = require('fs');
+            const report = fs.readFileSync('./progress/weekly-report.md', 'utf8');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Weekly English Progress Report ${new Date().toISOString().split('T')[0]}`,
+              body: report,
+              labels: ['weekly-report']
+            });
+            
+            console.log('Issue created successfully');
+          } catch (error) {
+            console.error('Error creating issue:', error);
+            throw error;
+          }
