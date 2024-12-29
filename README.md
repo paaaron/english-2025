@@ -17,4 +17,4 @@ Personal English learning progress tracking system.
 4. Update learning materials regularly
 
 ## Progress Tracking
-![Progress Chart](progress/weekly_charts.png)
+![Gráfico de Progreso](progress/charts/study_time.png)
