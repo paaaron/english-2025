@@ -4,7 +4,7 @@
 
 ### Primary Objectives
 1. Achieve C1 certification by December 2025
-2. Maintain 30-minute daily English practice
+2. Maintain 60-minute daily English practice
 3. Hold basic conversations without translation
 
 ### Key Metrics
