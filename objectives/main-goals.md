@@ -1,9 +1,9 @@
 # Main English Learning Goals 2025
 
-## Target Level: C1 (Upper Intermediate)
+## Target Level: C1 (Advanced)
 
 ### Primary Objectives
-1. Achieve B2 certification by December 2025
+1. Achieve C1 certification by December 2025
 2. Maintain 30-minute daily English practice
 3. Hold basic conversations without translation
 
